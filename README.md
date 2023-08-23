@@ -2,8 +2,8 @@
 Your project's description...
 
 ## Environments
-- Preview: https://main--{repo}--{owner}.hlx.page/
-- Live: https://main--{repo}--{owner}.hlx.live/
+- Preview: [https://main--{arbory-tech-blog--arbory-digital-inc.hlx.page/](https://main--arbory-tech-blog--arbory-digital-inc.hlx.page/)
+- Live: [https://main--{arbory-tech-blog--arbory-digital-inc.hlx.live/](https://main--arbory-tech-blog--arbory-digital-inc.hlx.live/)
 
 ## Installation
 
