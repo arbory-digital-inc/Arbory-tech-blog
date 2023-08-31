@@ -249,3 +249,7 @@ main .section {
 main .section.highlight {
   background-color: var(--highlight-background-color);
 }
+
+::selection {
+  background-color: #62a814;
+}
