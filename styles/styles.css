@@ -18,6 +18,7 @@
   --overlay-background-color: #272B36;
   --highlight-background-color: #232323;
   --text-color: #FFFFFF;
+  
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
@@ -59,6 +60,9 @@
     --heading-font-size-s: 24px;
     --heading-font-size-xs: 22px;
   }
+}
+h1 {
+  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
 }
 
 body {
