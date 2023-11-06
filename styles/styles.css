@@ -259,5 +259,6 @@ main .section.highlight {
 }
 
 ::selection {
+  color: white;
   background-color: #62a814;
 }
