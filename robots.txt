@@ -1,0 +1,4 @@
+user-agent: *
+allow: /
+
+sitemap: https://blog.arborydigital.com/sitemap-index.xml
