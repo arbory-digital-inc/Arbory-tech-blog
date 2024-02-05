@@ -1,9 +1,5 @@
 sitemaps:
   blog:
-    origin: https://blog.arborydigital.com
+    origin: https://blog.arborydigital.com/
     lastmod: YYYY-MM-DD
-    languages:
-      en:
-        source: /query-index.json
-        destination: /sitemap.xml
-        hreflang: en
+    destination: /sitemap.xml
