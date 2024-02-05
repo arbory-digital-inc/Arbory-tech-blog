@@ -1,5 +1,3 @@
-version: 1
-
 sitemaps:
   blog:
     origin: https://blog.arborydigital.com
