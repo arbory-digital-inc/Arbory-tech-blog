@@ -1,4 +1,11 @@
+version: 1
+
 sitemaps:
-   example:
-     source: /query-index.json
-     destination: /sitemap.xml
+  blog:
+    origin: https://blog.arborydigital.com
+    lastmod: YYYY-MM-DD
+    languages:
+      en:
+        source: /query-index.json
+        destination: /sitemap.xml
+        hreflang: en
