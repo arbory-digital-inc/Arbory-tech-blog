@@ -677,4 +677,62 @@ function init() {
   });
 }
 
+export function getFormattedDate(date, locale = 'en') {
+  const defaultLocaleOption = { year: 'numeric', month: 'short', day: 'numeric' };
+  const default2DigitDayLocaleOption = { year: 'numeric', month: 'long', day: '2-digit' };
+
+  const dateLocaleMap = {
+    en: {
+      locale: 'en-GB',
+      options: defaultLocaleOption,
+      format: (formattedDate) => {
+        const [day, month, year] = formattedDate.split(' ');
+        return `${month} ${day}, ${year}`;
+      },
+    },
+    jp: {
+      locale: 'ja-JP',
+      options: { year: 'numeric', month: '2-digit', day: 'numeric' },
+      format: (formattedDate) => {
+        const [year, month, day] = formattedDate.split('/');
+        return `${year}年${month}月${day}日`;
+      },
+    },
+    cn: {
+      locale: 'zh-CN',
+      options: { year: 'numeric', month: '2-digit', day: 'numeric' },
+      format: (formattedDate) => {
+        const [year, month, day] = formattedDate.split('/');
+        return `${year}年${month}月${day}日`;
+      },
+    },
+    id: { locale: 'id-ID', options: default2DigitDayLocaleOption },
+    de: {
+      locale: 'de-DE',
+      options: { year: 'numeric', month: 'short', day: '2-digit' },
+      format: (formattedDate) => {
+        const [day, month, year] = formattedDate.split(' ');
+        return `${day} ${month.substring(0, 3)} ${year}`;
+      },
+    },
+    it: {
+      locale: 'it-IT',
+      options: { year: 'numeric', month: 'short', day: '2-digit' },
+      format: (formattedDate) => {
+        const [day, month, year] = formattedDate.split(' ');
+        return `${day} ${month.charAt(0).toUpperCase() + month.slice(1)}, ${year}`;
+      },
+    },
+    th: { locale: 'th-TH', options: default2DigitDayLocaleOption },
+  };
+
+  if (dateLocaleMap[locale]) {
+    // eslint-disable-next-line
+    const formattedDate = date.toLocaleDateString(dateLocaleMap[locale].locale, dateLocaleMap[locale].options);
+    // eslint-disable-next-line
+    return dateLocaleMap[locale].format ? dateLocaleMap[locale].format(formattedDate) : formattedDate;
+  }
+  return date;
+}
+
 init();

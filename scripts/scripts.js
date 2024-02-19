@@ -11,6 +11,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  fetchPlaceholders,
 } from './lib-franklin.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -132,7 +133,7 @@ async function loadPage() {
   loadDelayed();
 }
 
-loadPage();
+
 
 export function getLanguageFromPath(pathname, resetCache = false) {
   if (resetCache) {
@@ -229,3 +230,5 @@ export async function fetchTagsOrCategories(ids = [], sheet = 'tags', type = '',
   return window.tagsCategories[sheetKey]
     .filter((ele) => (!ids.length || ids.indexOf(ele.id) > -1) && (!type || ele.type === type));
 }
+
+loadPage();
