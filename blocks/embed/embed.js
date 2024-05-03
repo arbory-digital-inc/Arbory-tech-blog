@@ -54,6 +54,25 @@ const loadScript = (url, callback, type) => {
     loadScript('https://platform.twitter.com/widgets.js');
     return embedHTML;
   };
+
+  // vidyard videos
+const embedVidyard = (url) => {
+  const video = url.pathname.split('/').pop(); // breaks out UUID of vidyard URL
+  const script = document.createElement('script'); // creates and appends vidyard player script to header
+  script.type = 'text/javascript';
+  script.src = 'https://play.vidyard.com/embed/v4.js';
+  document.head.appendChild(script);
+  // HTML code for placing the vidyard player on the page. Note that this code only places a preview
+  // thumbnail on the page that the above script replaces on loading
+  const embedHTML = `<div> 
+      <img class="vidyard-player-embed"
+      src="https://play.vidyard.com/${video}.jpg"
+      data-uuid="${video}"
+      data-v="4"
+      data-type="inline"/>
+    </div>`;
+  return embedHTML;
+};
   
   const loadEmbed = (block, link, autoplay) => {
     if (block.classList.contains('embed-is-loaded')) {
@@ -72,6 +91,10 @@ const loadScript = (url, callback, type) => {
       {
         match: ['twitter'],
         embed: embedTwitter,
+      },
+      {
+        match: ['vidyard'],
+        embed: embedVidyard,
       },
     ];
   
