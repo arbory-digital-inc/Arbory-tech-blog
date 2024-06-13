@@ -133,3 +133,99 @@ async function loadPage() {
 }
 
 loadPage();
+
+export function getLanguageFromPath(pathname, resetCache = false) {
+  if (resetCache) {
+    language = undefined;
+  }
+
+  if (language !== undefined) return language;
+
+  const segs = pathname.split('/');
+  if (segs.length > 1) {
+    const l = segs[1];
+    if (LANGUAGES.has(l)) {
+      language = l;
+    }
+  }
+
+  if (language === undefined) {
+    language = 'en'; // default to English
+  }
+
+  return language;
+}
+
+export function getLanguage(curPath = window.location.pathname, resetCache = false) {
+  return getLanguageFromPath(curPath, resetCache);
+}
+
+export function getLanguangeSpecificPath(path) {
+  const lang = getLanguage();
+  if (lang === 'en') return path;
+  return `/${lang}${path}`;
+}
+
+export async function loadScript(url, attrs = {}) {
+  const script = document.createElement('script');
+  script.src = url;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [name, value] of Object.entries(attrs)) {
+    script.setAttribute(name, value);
+  }
+  const loadingPromise = new Promise((resolve, reject) => {
+    script.onload = resolve;
+    script.onerror = reject;
+  });
+  document.head.append(script);
+  return loadingPromise;
+}
+
+export async function queryIndex(sheet) {
+  await loadScript('/ext-libs/jslinq/jslinq.min.js');
+  let index = await fetchIndex('query-index', sheet);
+  // Fetch the index until it is complete
+  while (!index.complete) {
+    // eslint-disable-next-line no-await-in-loop
+    index = await fetchIndex('query-index', sheet);
+  }
+  const { jslinq } = window;
+  return jslinq(index.data);
+}
+
+export async function fetchTagsOrCategories(ids = [], sheet = 'tags', type = '', locale = 'en') {
+  window.tagsCategories = window.tagsCategories || {};
+  const sheetKey = sheet;
+  const loaded = window.tagsCategories[`${sheetKey}-loaded`];
+
+  if (!loaded) {
+    const placeholders = await fetchPlaceholders(locale);
+    const sheetName = sheet ? `sheet=${sheet}` : '';
+    window.tagsCategories[`${sheetKey}-loaded`] = new Promise((resolve, reject) => {
+      fetch(`/tags-categories.json?${sheetName}`)
+        .then((resp) => {
+          if (resp.ok) {
+            return resp.json();
+          }
+          throw new Error(`${resp.status}: ${resp.statusText}`);
+        })
+        .then((results) => {
+          // eslint-disable-next-line max-len
+          window.tagsCategories[sheetKey] = results.data.map((ele) => ({ id: ele.Key, type: ele.Type, name: placeholders[ele.Key] }));
+          resolve();
+        }).catch((error) => {
+          // Error While Loading tagsCategories
+          window.tagsCategories[sheetKey] = {};
+          reject(error);
+        });
+    });
+  }
+
+  if (!window.jslinq) {
+    await loadScript('/ext-libs/jslinq/jslinq.min.js');
+  }
+
+  await window.tagsCategories[`${sheetKey}-loaded`];
+  return window.tagsCategories[sheetKey]
+    .filter((ele) => (!ids.length || ids.indexOf(ele.id) > -1) && (!type || ele.type === type));
+}
