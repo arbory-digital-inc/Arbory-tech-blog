@@ -24,6 +24,7 @@
   --body-font-family: roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
+  --code-font-family: "Roboto Mono", source-code-pro, "Courier New", monospace;
 
   /* body sizes */
   --body-font-size-m: 22px;
@@ -40,6 +41,10 @@
 
   /* nav height */
   --nav-height: 64px;
+
+  /* background colors */
+  --code-bg-color: #201f1f;
+
 
 }
 
@@ -261,4 +266,74 @@ main .section.highlight {
 ::selection {
   color: white;
   background-color: #62a814;
+}
+
+/* inline code styles */
+code {
+  font-family: var(--code-font-family);
+  letter-spacing: -0.08px;
+  line-height: 1.8;
+}
+
+pre code {
+  font-size: 14px;
+  border: unset;
+}
+
+code:not(pre > code) {
+  font-size: 14px;
+  overflow-wrap: break-word;
+  border: 1px solid #e5e5e5;
+  background-color: var(--code-bg-color);
+  color: var(--dark-spectrum-blue);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+@media screen and (min-width: 600px) {
+  pre code {
+    font-size: 16px;
+  }
+}
+
+pre {
+  width: 100%;
+}
+
+main table pre {
+  margin: 0;
+  padding: 0.5em;
+  background-color: transparent;
+}
+
+pre:not(:has(.hljs)) {
+  overflow-x: scroll;
+}
+
+/* inline code styles */
+code {
+  font-family: var(--code-font-family);
+  letter-spacing: -0.08px;
+  line-height: 1.8;
+}
+
+pre code {
+  font-size: 14px;
+  color: #cbb105;
+}
+
+code:not(pre > code) {
+  font-size: 14px;
+  overflow-wrap: break-word;
+  border: 1px solid #e5e5e5;
+  background-color: var(--code-bg-color);
+  color: var(--dark-spectrum-blue);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+@media screen and (min-width: 600px) {
+  pre code {
+    font-size: 16px;
+  }
 }
