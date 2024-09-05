@@ -298,16 +298,18 @@ code:not(pre > code) {
 
 pre {
   width: 100%;
+  
 }
 
 main table pre {
   margin: 0;
   padding: 0.5em;
-  background-color: transparent;
 }
 
 pre:not(:has(.hljs)) {
-  overflow-x: scroll;
+  overflow-x: hidden;
+  background-color: #010700;
+
 }
 
 /* inline code styles */
@@ -319,7 +321,7 @@ code {
 
 pre code {
   font-size: 14px;
-  color: #cbb105;
+  color: #00a30b;
   overflow: hidden;
 }
 
