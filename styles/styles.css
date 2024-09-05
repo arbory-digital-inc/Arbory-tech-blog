@@ -320,6 +320,7 @@ code {
 pre code {
   font-size: 14px;
   color: #cbb105;
+  overflow: hidden;
 }
 
 code:not(pre > code) {
