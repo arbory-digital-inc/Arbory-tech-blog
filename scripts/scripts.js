@@ -1,5 +1,4 @@
 import {
-  sampleRUM,
   buildBlock,
   loadHeader,
   loadFooter,
@@ -8,12 +7,12 @@ import {
   decorateSections,
   decorateBlocks,
   decorateTemplateAndTheme,
-  waitForLCP,
-  loadBlocks,
+  waitForFirstImage,
+  loadSection,
+  loadSections,
   loadCSS,
-} from './lib-franklin.js';
-
-const LCP_BLOCKS = []; // add your LCP blocks to the list
+  sampleRUM,
+} from './aem.js';
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -80,8 +79,10 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await waitForLCP(LCP_BLOCKS);
+    await loadSection(main.querySelector('.section'), waitForFirstImage);
   }
+
+  sampleRUM.enhance();
 
   try {
     /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
@@ -93,63 +94,13 @@ async function loadEager(doc) {
   }
 }
 
-/* STYLING FOR CODE BLOCKS */
-// based on decorateTemplateAndTheme in lib-franklin.js
-export function customDecorateTemplateAndTheme() {
-  const addClasses = (element, classes) => {
-    classes.split(',').forEach((c) => {
-      element.classList.add(toClassName(c.trim()));
-    });
-  };
-  const template = getMetadata('template');
-  if (template) addClasses(document.body, `${template.toLowerCase()}-template`);
-  const theme = getMetadata('theme');
-  if (theme) addClasses(document.body, `${theme.toLowerCase()}-theme`);
-}
-
-async function loadHighlightLibrary() {
-  const highlightCSS = createTag('link', {
-    rel: 'stylesheet',
-    href: '/styles/atom-one-dark.min.css',
-  });
-  document.head.append(highlightCSS);
-
-  await loadScript('/scripts/highlight.js');
-  const initScript = createTag('script', {}, 'hljs.highlightAll();');
-  document.body.append(initScript);
-}
-
-export async function decorateGuideTemplateCodeBlock() {
-  const firstCodeBlock = document.querySelector('pre code');
-  if (!firstCodeBlock) return;
-
-  const intersectionObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          observer.unobserve(entry.target);
-          loadHighlightLibrary();
-        }
-      });
-    },
-    {
-      root: null,
-      rootMargin: '200px', // Adjust rootMargin as needed to trigger intersection at the desired position before the codeblock becomes visible
-      threshold: 0,
-    },
-  );
-
-  // when first codeblock is coming into view, load highlight.js for page
-  intersectionObserver.observe(firstCodeBlock);
-}
-
 /**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
   const main = doc.querySelector('main');
-  await loadBlocks(main);
+  await loadSections(main);
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
@@ -160,10 +111,6 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-
-  sampleRUM('lazy');
-  sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
-  sampleRUM.observe(main.querySelectorAll('picture > img'));
 }
 
 /**
