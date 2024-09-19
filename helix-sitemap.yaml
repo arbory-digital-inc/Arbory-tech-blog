@@ -1,5 +1,11 @@
 sitemaps:
   blog:
     origin: https://blog.arborydigital.com/
+    source: /query-index.json
     lastmod: YYYY-MM-DD
     destination: /sitemap.xml
+  test:
+    origin: https://blog.arborydigital.com/
+    source: /query-index.json
+    lastmod: YYYY-MM-DD
+    destination: /test.xml
